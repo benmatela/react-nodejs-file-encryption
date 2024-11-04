@@ -30,10 +30,11 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
         // Add model validation eg validator.ts
         const encryptFileRequest: IEncryptFileRequest = {
             aesBlockSize: parseInt(req.body.aesBlockSize),
-            fileToEncryptPath: String(req.body.fileToEncryptPath)
+            fileToEncryptPath: String(req.body.fileToEncryptPath),
+            encryptionPassword: String(req.body.encryptionPassword)
         }
         const encryptFileResponse: IEncryptFileResponse = await encryptionService
-            .encrypt(encryptFileRequest.fileToEncryptPath, encryptFileRequest.aesBlockSize);
+            .encrypt(encryptFileRequest);
 
         // Build our response
         httpResponseWrapper.data = encryptFileResponse;

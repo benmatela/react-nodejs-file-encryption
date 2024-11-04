@@ -1,4 +1,4 @@
-import { IEncryptFileResponse } from "../models/encryption.model";
+import { IDecryptFileRequest, IDecryptFileResponse, IEncryptFileRequest, IEncryptFileResponse } from "../models/encryption.model";
 import { AESBlockSize, EncryptionAlgorithm } from "../models/enums/encryption.enum";
 import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
@@ -12,33 +12,29 @@ const NAMESPACE = 'ENCRYPTION SERVICE';
  * 
  * More info: https://www.moserware.com/2009/09/stick-figure-guide-to-advanced.html
  * 
- * @param {string} fileToEncryptPath 
- * @param {AESBlockSize} aesBlockSize 
+ * @param {IEncryptFileRequest} encryptFileRequest 
+ * 
+ * @returns {Buffer} buffer
+ * 
+ * @throws {Error} error
  */
-export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockSize): Promise<IEncryptFileResponse> => {
+export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<IEncryptFileResponse> => {
     try {
         const encryptFileResponse: IEncryptFileResponse = {
-            aesBlockSize: aesBlockSize,
-            fileToEncryptPath: fileToEncryptPath,
+            aesBlockSize: encryptFileRequest.aesBlockSize,
+            fileToEncryptPath: encryptFileRequest.fileToEncryptPath,
             encryptedFilePath: "/newfile.txt",
             encryptionDurationInMinutes: 0,
             fileToEncryptSize: 0,
             encryptedFileSize: 0,
         }
-        /**
-         * Create a hash of the password we'll be using to encrypt files.
-         * 
-        
-         */
-        const hash = crypto.createHash(EncryptionAlgorithm.SHA_256);
-        hash.update("mySuperSecretEncryptionPassword");
-        const encryptionKey = crypto.randomBytes(32);
+        const encryptionKey = getCipherKey(encryptFileRequest.encryptionPassword);
 
         /**
          * Streams are a powerful tool that allows us to write programs which deal with 
          * small amounts of data in an asynchronous manner.
          */
-        const readStream = fs.createReadStream(`${__dirname}${fileToEncryptPath}`);
+        const readStream = fs.createReadStream(`${__dirname}${encryptFileRequest.fileToEncryptPath}`);
 
         /**
          * Read a chunk of data, pass that chunk to the gzip stream to be compressed, then write 
@@ -87,9 +83,18 @@ export const getCipherKey = (password: string) => {
     }
 }
 
-export const decrypt = () => {
+/**
+ * Decrypts a file
+ * 
+ * @param {IDecryptFileResponse} decryptFileRequest 
+ * 
+ * @returns {IDecryptFileResponse} decryptFileResponse
+ * 
+ * @throws {Error} error
+ */
+export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<IDecryptFileResponse> => {
     try {
-
+        return {} as IDecryptFileResponse;
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
         throw new Error(error.message);
