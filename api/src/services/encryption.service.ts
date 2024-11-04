@@ -15,7 +15,7 @@ const NAMESPACE = 'ENCRYPTION SERVICE';
  */
 export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockSize): Promise<IEncryptFileResponse> => {
     try {
-        const encryptedFileResponse: IEncryptFileResponse = {
+        const encryptFileResponse: IEncryptFileResponse = {
             aesBlockSize: aesBlockSize,
             fileToEncryptPath: fileToEncryptPath,
             encryptedFilePath: "/newfile.txt",
@@ -31,10 +31,10 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
         // readStream.on('data', (chunk) => {
         //     console.log(chunk.toString('utf8'));
         // });
-        const writeStream = fs.createWriteStream(`${__dirname}${encryptedFileResponse.encryptedFilePath}`);
+        const writeStream = fs.createWriteStream(`${__dirname}${encryptFileResponse.encryptedFilePath}`);
         readStream.pipe(writeStream);
 
-        return encryptedFileResponse;
+        return encryptFileResponse;
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
         throw new Error(error.message);

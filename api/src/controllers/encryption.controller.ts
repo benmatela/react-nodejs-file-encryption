@@ -32,11 +32,11 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
             aesBlockSize: parseInt(req.body.aesBlockSize),
             fileToEncryptPath: String(req.body.fileToEncryptPath)
         }
-        const encryptedFileResponse: IEncryptFileResponse = await encryptionService
+        const encryptFileResponse: IEncryptFileResponse = await encryptionService
             .encrypt(encryptFileRequest.fileToEncryptPath, encryptFileRequest.aesBlockSize);
 
         // Build our response
-        httpResponseWrapper.data = encryptedFileResponse;
+        httpResponseWrapper.data = encryptFileResponse;
         httpResponseWrapper.success = true;
         httpResponseWrapper.status = HTTP_STATUS_CODE.OK;
 
