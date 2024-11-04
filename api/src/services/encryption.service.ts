@@ -2,6 +2,7 @@ import { IEncryptFileResponse } from "../models/encryption.model";
 import { AESBlockSize } from "../models/enums/encryption.enum";
 import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
+import * as zlib from 'zlib';
 
 const NAMESPACE = 'ENCRYPTION SERVICE';
 
@@ -23,13 +24,22 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
             fileToEncryptSize: 0,
             encryptedFileSize: 0,
         }
-        // Streams are a powerful tool that allows us to write programs which deal with 
-        // small amounts of data in an asynchronous manner.
+
+        /**
+         * Streams are a powerful tool that allows us to write programs which deal with 
+         * small amounts of data in an asynchronous manner.
+         */
         const readStream = fs.createReadStream(`${__dirname}${fileToEncryptPath}`);
 
-        // When we receive a file chunk from the stream, we pipe the read stream directly to the write stream.
+        /**
+         * Read a chunk of data, pass that chunk to the gzip stream to be compressed, then write 
+         * that compressed chunk to a new file. 
+         * 
+         * Do that until there are no more chunks to read from the original file.
+         */
         const writeStream = fs.createWriteStream(`${__dirname}${encryptFileResponse.encryptedFilePath}`);
-        readStream.pipe(writeStream);
+        const gzipStream = zlib.createGzip();
+        readStream.pipe(gzipStream).pipe(writeStream);
 
         return encryptFileResponse;
     } catch (error: any) {
