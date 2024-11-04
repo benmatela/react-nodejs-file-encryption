@@ -4,7 +4,7 @@ import loggingUtil from "./utils/logging.util";
 import cors from "cors";
 import { HTTP_STATUS_CODE } from "./models/enums/http-status-code.enum";
 import { IHttpResponseWrapper } from "./models/http-response-wrapper.model";
-import encryptionRoutes from './routes/encryption.route';
+// import encryptionRoutes from './routes/encryption.route';
 
 const NAMESPACE = "SERVER";
 
@@ -73,7 +73,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Routes
-app.use('/api/v1/encryption', encryptionRoutes);
+// app.use('/api/v1/encryption', encryptionRoutes);
 
 // Default API error response
 app.use((req: Request, res: Response) => {

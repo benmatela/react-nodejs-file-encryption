@@ -1,5 +1,3 @@
-import chalk from 'chalk';
-
 /**
  * Displays normal logs.
  * @param namespace 
@@ -8,9 +6,9 @@ import chalk from 'chalk';
  */
 const info = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.info(chalk.cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`, object));
+        console.info(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`, object);
     } else {
-        console.info(chalk.cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`));
+        console.info(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`);
     }
 };
 
@@ -22,9 +20,9 @@ const info = (namespace: string, message: string, object?: any) => {
  */
 const warn = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.warn(chalk.yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`, object));
+        console.warn(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`, object);
     } else {
-        console.warn(chalk.yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`));
+        console.warn(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`);
     }
 };
 
@@ -36,9 +34,9 @@ const warn = (namespace: string, message: string, object?: any) => {
  */
 const error = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.error(chalk.red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`, object));
+        console.error(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`, object);
     } else {
-        console.error(chalk.red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`));
+        console.error(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`);
     }
 };
 
@@ -50,9 +48,9 @@ const error = (namespace: string, message: string, object?: any) => {
  */
 const debug = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.debug(chalk.blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object));
+        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
     } else {
-        console.debug(chalk.blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`));
+        console.debug(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
     }
 };
 
@@ -62,7 +60,7 @@ const getTimeStamp = (): string => {
 
 export default {
     info,
-    warn,
     error,
-    debug
+    debug,
+    warn
 };
