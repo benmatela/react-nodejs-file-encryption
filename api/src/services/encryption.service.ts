@@ -1,5 +1,5 @@
 import { IDecryptFileRequest, IDecryptFileResponse, IEncryptFileRequest, IEncryptFileResponse } from "../models/encryption.model";
-import { AESBlockSize, EncryptionAlgorithm } from "../models/enums/encryption.enum";
+import { EncryptionAlgorithm } from "../models/enums/encryption.enum";
 import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
 import * as zlib from 'zlib';
@@ -29,6 +29,15 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
             encryptedFileSize: 0,
         }
         const encryptionKey = getCipherKey(encryptFileRequest.encryptionPassword);
+        /**
+         * The most important aspect of an `initialization vector` is that it is never reused. 
+         * 
+         * We can ensure this will be the case by generating a `random initialization vector` for each file we encrypt.
+         * 
+         * So long as the initialization vector is generated using a cryptographically secure random (or pseudo-random) number generator, getting 
+         * the same initialization vector is extremely unlikely.
+         */
+        const initVect = crypto.randomBytes(16);
 
         /**
          * Streams are a powerful tool that allows us to write programs which deal with 
