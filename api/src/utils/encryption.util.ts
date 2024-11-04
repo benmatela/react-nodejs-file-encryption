@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import { EncryptionAlgorithm } from '../models/enums/encryption.enum';
 import loggingUtil from './logging.util';
+import * as transform from "stream";
 
 const NAMESPACE = 'ENCRYPTION UTIL';
 
@@ -31,3 +32,17 @@ export const getCipherKey = (password: string) => {
         throw new Error(error.message);
     }
 }
+
+export const transformStreamFileChunk = (chunk: Buffer, encoding: string, callback: Function, appended: boolean = false) => {
+    try {
+        // if (!appended) {
+        //     this.push(this.initVect);
+        //     this.appended = true;
+        //   }
+        //   this.push(chunk);
+        //   callback();
+    } catch (error: any) {
+        loggingUtil.error(NAMESPACE, error.message);
+        throw new Error(error.message);
+    }
+  }
