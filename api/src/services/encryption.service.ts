@@ -8,7 +8,7 @@ import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 import * as crypto from 'crypto';
-import { AppendInitVect, getCipherKey, transformStreamFileChunks } from "../utils/encryption.util";
+import { AppendInitVector, getCipherKey } from "../utils/encryption.util";
 import { EncryptionAlgorithm } from "../models/enums/encryption.enum";
 
 const NAMESPACE = 'ENCRYPTION SERVICE';
@@ -63,7 +63,7 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
         const readStream = fs.createReadStream(`${__dirname}${encryptFileRequest.fileToEncryptPath}`);
         const gzipStream = zlib.createGzip();
         const cipher = crypto.createCipheriv(EncryptionAlgorithm.AES256, cipherKey, initVect);
-        const appendInitVect = new AppendInitVect(initVect);
+        const appendInitVector = new AppendInitVector(initVect);
         // Create a write stream with a different file extension.
         const writeStream = fs.createWriteStream(`${__dirname}${encryptFileResponse.encryptedFilePath}.enc`);
         /**
@@ -75,7 +75,7 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
         readStream
             .pipe(gzipStream)
             .pipe(cipher)
-            .pipe(appendInitVect)
+            .pipe(appendInitVector)
             .pipe(writeStream);
 
         return encryptFileResponse;

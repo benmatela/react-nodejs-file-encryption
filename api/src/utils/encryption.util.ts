@@ -1,8 +1,7 @@
 import * as crypto from 'crypto';
 import { EncryptionAlgorithm } from '../models/enums/encryption.enum';
 import loggingUtil from './logging.util';
-import { Transform, TransformOptions, Writable, WritableOptions } from "stream";
-import { EventEmitterAsyncResourceOptions } from 'events';
+import { Transform, TransformOptions } from "stream";
 
 const NAMESPACE = 'ENCRYPTION UTIL';
 
@@ -35,7 +34,10 @@ export const getCipherKey = (password: string): Buffer => {
 }
 
 /**
- * Modifies stream data(file chunks)
+ * Modifies stream data(file chunks) by appending the `initVector`
+ * 
+ * Since we will be modifying the stream data, we will need to 
+ * use a Transform stream.
  * 
  * There are four stream types within Node.js:
  * 
@@ -46,27 +48,8 @@ export const getCipherKey = (password: string): Buffer => {
  * `Duplex` — streams that are both Readable and Writable (for example `net.Socket`).
  * 
  * `Transform` — Duplex streams that can modify or transform the data as it is written and read (for example `zlib.createDeflate()`).
- * 
- * @param {Buffer[]} allChunks 
- * @param {Buffer} chunk 
- * @param {string} encoding 
  */
-export const transformStreamFileChunks = (allChunks: Buffer[], chunk: Buffer, encoding: string, initVect: Buffer) => {
-    try {
-        if (!allChunks.includes(chunk)) {
-
-        }
-    } catch (error: any) {
-        loggingUtil.error(NAMESPACE, error.message);
-        throw new Error(error.message);
-    }
-}
-
-/**
- * Since we will be modifying the stream data(chunks), we will need to 
- * use a Transform stream.
- */
-export class AppendInitVect extends Transform {
+export class AppendInitVector extends Transform {
     initVector: Buffer;
     appended: boolean;
 
@@ -76,10 +59,12 @@ export class AppendInitVect extends Transform {
         this.appended = false;
     }
 
-    _transform(chunk: Buffer, encoding: BufferEncoding, callback: () => void) {
-        console.log("initVector: ", this.initVector);
-        console.log("encoding: ", encoding);
-        console.log("chunk: ", chunk);
+    _transform(chunk: Buffer, encoding: BufferEncoding, callback: Function) {
+        if (!this.appended) {
+            this.push(this.initVector);
+            this.appended = true;
+        }
+        this.push(chunk);
         callback();
     }
 }
