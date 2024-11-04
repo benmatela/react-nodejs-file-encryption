@@ -8,7 +8,8 @@ import { HTTP_STATUS_CODE } from '../models/enums/http-status-code.enum';
 const NAMESPACE = 'ENCRYPTION CONTROLLER';
 
 /**
- * Encrypts a file
+ * Encrypts a file using AES
+ * 
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
@@ -27,7 +28,7 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
     }
     try {
         // Add model validation eg validator.ts
-        
+
         const encryptedFileResponse: IEncryptedFileResponse = await encryptionService
             .encrypt(String(req.body.fileToEncryptPath), parseInt(req.body.aesBlockSize));
 
@@ -39,6 +40,12 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
         res.status(httpResponseWrapper.status).send(httpResponseWrapper);
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
+
+        // Build our response
+        httpResponseWrapper.message = "File encryption failed."
+        httpResponseWrapper.errors.push(error.message);
+
+        res.status(httpResponseWrapper.status).send(httpResponseWrapper);
     }
 };
 
