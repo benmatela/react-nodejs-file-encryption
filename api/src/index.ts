@@ -2,8 +2,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import loggingUtil from "./utils/logging.util";
 import cors from "cors";
-import http from "http";
 import { HTTP_STATUS_CODE } from "./models/enums/http-status-code.enum";
+import { IHttpResponseWrapper } from "./models/http-response-wrapper.model";
 
 const NAMESPACE = "SERVER";
 
@@ -49,20 +49,26 @@ app.use((req: Request, res: Response, next) => {
   next();
 });
 
-// API error handling
-app.use((req: Request, res: Response) => {
-  const error = new Error("Not found");
-  res.status(HTTP_STATUS_CODE.NOT_FOUND).json({
-    message: error.message,
-    status: HTTP_STATUS_CODE.NOT_FOUND,
-  });
-});
-
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
+// Default API response
+app.use((req: Request, res: Response) => {
+  const response: IHttpResponseWrapper<any> = {
+    data: {},
+    currentPage: 0,
+    status: HTTP_STATUS_CODE.NOT_FOUND,
+    success: false,
+    message: "Not found",
+    totalPages: 0,
+    totalRecords: 0,
+    errors: ["Not found"]
+  }
+  res.status(HTTP_STATUS_CODE.NOT_FOUND).json(response);
+});
+
 // Start server
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+  loggingUtil.info(NAMESPACE, `Server is running at http://localhost:${port}`);
 });

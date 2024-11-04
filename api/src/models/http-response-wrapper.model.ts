@@ -1,10 +1,10 @@
 /**
  * Global API response wrapper.
  * 
- * Takes in a type(model) which defines the return data type.
+ * Takes in a Type(model) which defines the return data type.
  */
-export interface IHttpResponseWrapper<Ttype> {
-    data: Ttype;
+export interface IHttpResponseWrapper<TType> {
+    data: TType;
     currentPage: number;
     status: number;
     success: boolean;
