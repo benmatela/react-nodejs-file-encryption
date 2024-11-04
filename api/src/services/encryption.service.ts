@@ -1,4 +1,4 @@
-import { IEncryptedFileResponse } from "../models/encryption.model";
+import { IEncryptFileResponse } from "../models/encryption.model";
 import { AESBlockSize } from "../models/enums/encryption.enum";
 import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
@@ -13,9 +13,9 @@ const NAMESPACE = 'ENCRYPTION SERVICE';
  * @param {string} fileToEncryptPath 
  * @param {AESBlockSize} aesBlockSize 
  */
-export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockSize): Promise<IEncryptedFileResponse> => {
+export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockSize): Promise<IEncryptFileResponse> => {
     try {
-        const encryptedFileResponse: IEncryptedFileResponse = {
+        const encryptedFileResponse: IEncryptFileResponse = {
             aesBlockSize: aesBlockSize,
             fileToEncryptPath: fileToEncryptPath,
             encryptedFilePath: "/newfile.txt",

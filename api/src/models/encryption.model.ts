@@ -3,7 +3,7 @@ import { AESBlockSize } from "./enums/encryption.enum";
 /**
  * Response for an encrypted file
  */
-export interface IEncryptedFileResponse {
+export interface IEncryptFileResponse {
     /**
      * AES Encryption block size
      */

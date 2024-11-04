@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import * as encryptionService from '../services/encryption.service';
 import loggingUtil from '../utils/logging.util';
-import { IEncryptedFileResponse, IEncryptFileRequest } from '../models/encryption.model';
+import { IEncryptFileResponse, IEncryptFileRequest } from '../models/encryption.model';
 import { IHttpResponseWrapper } from '../models/http-response-wrapper.model';
 import { HTTP_STATUS_CODE } from '../models/enums/http-status-code.enum';
 
@@ -16,8 +16,8 @@ const NAMESPACE = 'ENCRYPTION CONTROLLER';
  */
 const encrypt = async (req: Request, res: Response, next: NextFunction) => {
     loggingUtil.info(NAMESPACE, 'encrypt() called.');
-    const httpResponseWrapper: IHttpResponseWrapper<IEncryptedFileResponse> = {
-        data: {} as IEncryptedFileResponse,
+    const httpResponseWrapper: IHttpResponseWrapper<IEncryptFileResponse> = {
+        data: {} as IEncryptFileResponse,
         currentPage: 0,
         status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
         success: false,
@@ -32,7 +32,7 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
             aesBlockSize: parseInt(req.body.aesBlockSize),
             fileToEncryptPath: String(req.body.fileToEncryptPath)
         }
-        const encryptedFileResponse: IEncryptedFileResponse = await encryptionService
+        const encryptedFileResponse: IEncryptFileResponse = await encryptionService
             .encrypt(encryptFileRequest.fileToEncryptPath, encryptFileRequest.aesBlockSize);
 
         // Build our response
