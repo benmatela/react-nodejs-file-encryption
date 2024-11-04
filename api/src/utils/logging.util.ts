@@ -1,4 +1,4 @@
-import { cyan, yellowBright, red, blueBright, green, blue } from 'chalk';
+import chalk from 'chalk';
 
 /**
  * Displays normal logs.
@@ -8,9 +8,9 @@ import { cyan, yellowBright, red, blueBright, green, blue } from 'chalk';
  */
 const info = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.info(cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`, object));
+        console.info(chalk.cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`, object));
     } else {
-        console.info(cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`));
+        console.info(chalk.cyan(`[${getTimeStamp()}] [INFO] [${namespace}] ${message}`));
     }
 };
 
@@ -22,9 +22,9 @@ const info = (namespace: string, message: string, object?: any) => {
  */
 const warn = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.warn(yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`, object));
+        console.warn(chalk.yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`, object));
     } else {
-        console.warn(yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`));
+        console.warn(chalk.yellowBright(`[${getTimeStamp()}] [WARN] [${namespace}] ${message}`));
     }
 };
 
@@ -36,9 +36,9 @@ const warn = (namespace: string, message: string, object?: any) => {
  */
 const error = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.error(red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`, object));
+        console.error(chalk.red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`, object));
     } else {
-        console.error(red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`));
+        console.error(chalk.red(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`));
     }
 };
 
@@ -50,9 +50,9 @@ const error = (namespace: string, message: string, object?: any) => {
  */
 const debug = (namespace: string, message: string, object?: any) => {
     if (object) {
-        console.debug(blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object));
+        console.debug(chalk.blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object));
     } else {
-        console.debug(blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`));
+        console.debug(chalk.blue(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`));
     }
 };
 
