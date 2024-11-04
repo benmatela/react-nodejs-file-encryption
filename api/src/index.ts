@@ -18,6 +18,7 @@ const port = process.env.PORT || 3000;
 // Parse the body of the request
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
 app.use(express.json());
+// Enable CORS
 app.use(cors());
 
 // Rules for our API
@@ -71,7 +72,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("NodeJs Encryption API");
 });
 
-/** Routes */
+// Routes
 app.use('/api/v1/encryption', encryptionRoutes);
 
 // Default API error response
