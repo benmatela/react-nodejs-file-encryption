@@ -27,10 +27,7 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
         // small amounts of data in an asynchronous manner.
         const readStream = fs.createReadStream(`${__dirname}${fileToEncryptPath}`);
 
-        // When we receive a file chunk from the stream, we process it
-        // readStream.on('data', (chunk) => {
-        //     console.log(chunk.toString('utf8'));
-        // });
+        // When we receive a file chunk from the stream, we pipe the read stream directly to the write stream.
         const writeStream = fs.createWriteStream(`${__dirname}${encryptFileResponse.encryptedFilePath}`);
         readStream.pipe(writeStream);
 
