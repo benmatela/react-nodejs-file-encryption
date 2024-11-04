@@ -18,7 +18,7 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
         const encryptedFileResponse: IEncryptedFileResponse = {
             aesBlockSize: aesBlockSize,
             fileToEncryptPath: fileToEncryptPath,
-            encryptedFilePath: "./newfile.txt",
+            encryptedFilePath: "/newfile.txt",
             encryptionDurationInMinutes: 0,
             fileToEncryptSize: 0,
             encryptedFileSize: 0,
@@ -31,7 +31,7 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
         // readStream.on('data', (chunk) => {
         //     console.log(chunk.toString('utf8'));
         // });
-        const writeStream = fs.createWriteStream(encryptedFileResponse.encryptedFilePath);
+        const writeStream = fs.createWriteStream(`${__dirname}${encryptedFileResponse.encryptedFilePath}`);
         readStream.pipe(writeStream);
 
         return encryptedFileResponse;
