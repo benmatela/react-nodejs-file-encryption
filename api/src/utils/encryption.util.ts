@@ -78,6 +78,7 @@ export class AppendInitVect extends Transform {
 
     _transform(chunk: Buffer, encoding: BufferEncoding, callback: () => void) {
         console.log("initVector: ", this.initVector);
+        console.log("encoding: ", encoding);
         console.log("chunk: ", chunk);
         callback();
     }
