@@ -1,9 +1,14 @@
-import { IDecryptFileRequest, IDecryptFileResponse, IEncryptFileRequest, IEncryptFileResponse } from "../models/encryption.model";
-import { EncryptionAlgorithm } from "../models/enums/encryption.enum";
+import {
+    IDecryptFileRequest,
+    IDecryptFileResponse,
+    IEncryptFileRequest,
+    IEncryptFileResponse
+} from "../models/encryption.model";
 import loggingUtil from "../utils/logging.util"
 import * as fs from 'fs';
 import * as zlib from 'zlib';
 import * as crypto from 'crypto';
+import { getCipherKey } from "../utils/encryption.util";
 
 const NAMESPACE = 'ENCRYPTION SERVICE';
 
@@ -41,8 +46,8 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
          * 
          * We can ensure this will be the case by generating a `random initialization vector` for each file we encrypt.
          * 
-         * So long as the initialization vector is generated using a cryptographically secure random (or pseudo-random) number generator, getting 
-         * the same initialization vector is extremely unlikely.
+         * So long as the initialization vector is generated using a cryptographically secure 
+         * random (or pseudo-random) number generator, getting the same initialization vector is extremely unlikely.
          */
         const initVect = crypto.randomBytes(16);
 
@@ -65,34 +70,6 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
             .pipe(writeStream);
 
         return encryptFileResponse;
-    } catch (error: any) {
-        loggingUtil.error(NAMESPACE, error.message);
-        throw new Error(error.message);
-    }
-}
-
-/**
- * Easily get a cipher key for any password.
- * 
- * It is `one-way`, meaning it’s very difficult, given a hash, to reverse it and 
- * figure out what went in.
- * 
- * It produces a fixed output length. For `sha256`, it will always produce a `32` byte 
- * buffer, which just happens to be the size we needed for our `AES-256` cipher.
- * 
- * It’s deterministic. That is, the hash function will `always` produce the same hash for 
- * the same plaintext.
- * 
- * @param {string} password
- *  
- * @returns {Buffer} buffer
- */
-export const getCipherKey = (password: string) => {
-    try {
-        return crypto
-            .createHash(EncryptionAlgorithm.SHA_256)
-            .update(password)
-            .digest();
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
         throw new Error(error.message);
