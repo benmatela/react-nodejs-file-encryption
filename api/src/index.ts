@@ -1,19 +1,16 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import loggingUtil from "./utils/logging.util";
 import cors from "cors";
 import { HTTP_STATUS_CODE } from "./models/enums/http-status-code.enum";
 import { IHttpResponseWrapper } from "./models/http-response-wrapper.model";
-// import encryptionRoutes from './routes/encryption.route';
+import encryptionRoutes from './routes/encryption.route';
+import configs from "./utils/configs.util";
 
 const NAMESPACE = "SERVER";
 
-// Initialize .env variables
-dotenv.config();
-
 // Create App
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port = configs.server.port;
 
 // Parse the body of the request
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
@@ -72,10 +69,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("NodeJs Encryption API");
 });
 
-// Routes
-// app.use('/api/v1/encryption', encryptionRoutes);
+// API Routes
+app.use('/api/v1/encryption', encryptionRoutes);
 
-// Default API error response
+// Handle invalid URLs
 app.use((req: Request, res: Response) => {
   const response: IHttpResponseWrapper<any> = {
     data: {},
@@ -92,5 +89,5 @@ app.use((req: Request, res: Response) => {
 
 // Start server
 app.listen(port, () => {
-  loggingUtil.info(NAMESPACE, `Server is running at http://localhost:${port}`);
+  loggingUtil.info(NAMESPACE, `Server is running at http://${configs.server.hostname}:${port}`);
 });
