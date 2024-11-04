@@ -4,6 +4,7 @@ import loggingUtil from "./utils/logging.util";
 import cors from "cors";
 import { HTTP_STATUS_CODE } from "./models/enums/http-status-code.enum";
 import { IHttpResponseWrapper } from "./models/http-response-wrapper.model";
+import encryptionRoutes from './routes/encryption.route';
 
 const NAMESPACE = "SERVER";
 
@@ -65,11 +66,15 @@ app.use((req: Request, res: Response, next) => {
   next();
 });
 
+// Default API response
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("NodeJs Encryption API");
 });
 
-// Default API response
+/** Routes */
+app.use('/api/v1/encryption', encryptionRoutes);
+
+// Default API error response
 app.use((req: Request, res: Response) => {
   const response: IHttpResponseWrapper<any> = {
     data: {},
