@@ -8,7 +8,11 @@ import * as crypto from 'crypto';
 const NAMESPACE = 'ENCRYPTION SERVICE';
 
 /**
- * Encrypts a file using a chosen AES block size
+ * Encrypts a file using a chosen AES block size.
+ * 
+ * `AES` is a `symmetric-key` algorithm. This means that we need to know about all the input into our cipher in order to decrypt the ciphertext. 
+ * 
+ * The `user` keeps track of their `password`, and we’re using a deterministic hash function to generate our key.
  * 
  * More info: https://www.moserware.com/2009/09/stick-figure-guide-to-advanced.html
  * 
@@ -28,6 +32,9 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
             fileToEncryptSize: 0,
             encryptedFileSize: 0,
         }
+        /**
+         * Key to be used to encrypt the file
+         */
         const encryptionKey = getCipherKey(encryptFileRequest.encryptionPassword);
         /**
          * The most important aspect of an `initialization vector` is that it is never reused. 
