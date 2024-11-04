@@ -21,15 +21,31 @@ app.use(cors());
 
 // Rules for our API
 app.use((req: Request, res: any, next) => {
+  // Allowed Origin
   res.header("Access-Control-Allow-Origin", '*');
+  // Allowed Headers
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization, Multipart/Form-Data"
   );
 
+  // The OPTIONS HTTP method requests permitted communication options for a given URL or server.
   if (req.method == "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
+    // Allowed HTTP methods
+    const allowedMethods = "PUT, POST, PATCH, DELETE, GET";
+    res.header("Access-Control-Allow-Methods", allowedMethods);
+
+    const response: IHttpResponseWrapper<any> = {
+      data: {},
+      currentPage: 0,
+      status: HTTP_STATUS_CODE.OK,
+      success: true,
+      message: allowedMethods,
+      totalPages: 0,
+      totalRecords: 0,
+      errors: []
+    }
+    return res.status(response.status).json(response);
   }
   next();
 });
