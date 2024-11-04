@@ -1,7 +1,11 @@
 import { Response, Request, NextFunction } from 'express';
 import * as encryptionService from '../services/encryption.service';
 import loggingUtil from '../utils/logging.util';
-import { IEncryptFileResponse, IEncryptFileRequest } from '../models/encryption.model';
+import {
+    IEncryptFileResponse,
+    IEncryptFileRequest,
+    IDecryptFileResponse
+} from '../models/encryption.model';
 import { IHttpResponseWrapper } from '../models/http-response-wrapper.model';
 import { HTTP_STATUS_CODE } from '../models/enums/http-status-code.enum';
 
@@ -33,6 +37,7 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
             fileToEncryptPath: String(req.body.fileToEncryptPath),
             encryptionPassword: String(req.body.encryptionPassword)
         }
+
         const encryptFileResponse: IEncryptFileResponse = await encryptionService
             .encrypt(encryptFileRequest);
 
@@ -53,12 +58,35 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+/**
+ * Decrypts a file using AES
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ */
 const decrypt = async (req: Request, res: Response, next: NextFunction) => {
     loggingUtil.info(NAMESPACE, 'decrypt() called.');
+    const httpResponseWrapper: IHttpResponseWrapper<IDecryptFileResponse> = {
+        data: {} as IDecryptFileResponse,
+        currentPage: 0,
+        status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: "",
+        totalPages: 0,
+        totalRecords: 0,
+        errors: []
+    }
     try {
 
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
+
+        // Build our response
+        httpResponseWrapper.message = "File decryption failed."
+        httpResponseWrapper.errors.push(error.message);
+
+        res.status(httpResponseWrapper.status).send(httpResponseWrapper);
     }
 };
 
