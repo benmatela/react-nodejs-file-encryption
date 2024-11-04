@@ -55,7 +55,6 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
          * This key will be used to encrypt a file
          */
         const cipherKey = getCipherKey(encryptFileRequest.encryptionPassword);
-
         /**
          * Streams are a powerful tool that allows us to write programs which deal with 
          * small amounts of data in an asynchronous manner.

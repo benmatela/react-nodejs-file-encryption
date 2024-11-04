@@ -61,7 +61,7 @@ export class AppendInitVector extends Transform {
 
     _transform(chunk: Buffer, encoding: BufferEncoding, callback: Function) {
         if (!this.appended) {
-            this.push(this.initVector);
+            this.push(this.initVector, encoding);
             this.appended = true;
         }
         this.push(chunk);
