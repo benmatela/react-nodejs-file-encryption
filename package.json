@@ -1,9 +1,6 @@
 {
   "dependencies": {
-    "chalk": "^5.3.0",
-    "cors": "^2.8.5"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17"
   }
 }
