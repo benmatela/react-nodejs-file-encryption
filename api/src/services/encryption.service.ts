@@ -25,7 +25,7 @@ export const encrypt = async (fileToEncryptPath: string, aesBlockSize: AESBlockS
         }
         // Streams are a powerful tool that allows us to write programs which deal with 
         // small amounts of data in an asynchronous manner.
-        const readStream = fs.createReadStream(fileToEncryptPath);
+        const readStream = fs.createReadStream(`${__dirname}${fileToEncryptPath}`);
 
         // When we receive a file chunk from the stream, we process it
         // readStream.on('data', (chunk) => {
