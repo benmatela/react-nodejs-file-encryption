@@ -29,3 +29,17 @@ export interface IEncryptedFileResponse {
      */
     encryptedFileSize: number;
 }
+
+/**
+ * Request body for a file to encrypt
+ */
+export interface IEncryptFileRequest {
+    /**
+     * AES Encryption block size
+     */
+    aesBlockSize: AESBlockSize;
+    /**
+     * Path to the file to be encrypted
+     */
+    fileToEncryptPath: string;
+}

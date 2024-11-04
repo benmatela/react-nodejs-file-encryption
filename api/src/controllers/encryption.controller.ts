@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import * as encryptionService from '../services/encryption.service';
 import loggingUtil from '../utils/logging.util';
-import { IEncryptedFileResponse } from '../models/encryption.model';
+import { IEncryptedFileResponse, IEncryptFileRequest } from '../models/encryption.model';
 import { IHttpResponseWrapper } from '../models/http-response-wrapper.model';
 import { HTTP_STATUS_CODE } from '../models/enums/http-status-code.enum';
 
@@ -28,9 +28,12 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
     }
     try {
         // Add model validation eg validator.ts
-
+        const encryptFileRequest: IEncryptFileRequest = {
+            aesBlockSize: parseInt(req.body.aesBlockSize),
+            fileToEncryptPath: String(req.body.fileToEncryptPath)
+        }
         const encryptedFileResponse: IEncryptedFileResponse = await encryptionService
-            .encrypt(String(req.body.fileToEncryptPath), parseInt(req.body.aesBlockSize));
+            .encrypt(encryptFileRequest.fileToEncryptPath, encryptFileRequest.aesBlockSize);
 
         // Build our response
         httpResponseWrapper.data = encryptedFileResponse;
