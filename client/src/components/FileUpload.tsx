@@ -17,6 +17,12 @@ export const FileUpload = () => {
         }
     };
 
+    /**
+     * Handles file upload to the API 
+     * 
+     * This will break the selected file into 5MB chunks and send them to
+     * the API, which will encrypt and merge the file chunks into a whole file.
+     */
     const handleFileUpload = () => {
         try {
             if (!selectedFile) {
@@ -24,13 +30,17 @@ export const FileUpload = () => {
                 return;
             }
 
-            const chunkSize = 5 * 1024 * 1024; // 5MB (adjust based on your requirements)
+            // 5MB per chunk (adjust based on your requirements)
+            const chunkSize = 5 * 1024 * 1024; 
             const totalChunks = Math.ceil(selectedFile.size / chunkSize);
             const chunkProgress = 100 / totalChunks;
             let chunkNumber = 0;
             let start = 0;
             let end = 0;
 
+            /**
+             * Uploads the selected file in chunks
+             */
             const uploadNextChunk = async () => {
                 if (end <= selectedFile.size) {
                     const chunk = selectedFile.slice(start, end);
@@ -40,7 +50,7 @@ export const FileUpload = () => {
                     formData.append("totalChunks", String(totalChunks));
                     formData.append("originalname", selectedFile.name);
 
-                    fetch("http://localhost:8000/upload", {
+                    fetch("http://localhost:4000/encrypt", {
                         method: "POST",
                         body: formData,
                     })

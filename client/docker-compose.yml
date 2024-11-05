@@ -1,0 +1,13 @@
+services:
+  client:
+    image: node:alpine
+    container_name: client
+    entrypoint: /bin/sh
+    ports:
+      - 3000:3000
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: ./
+        target: /srv/app
+    tty: true
