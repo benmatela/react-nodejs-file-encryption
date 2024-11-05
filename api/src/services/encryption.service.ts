@@ -110,7 +110,7 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
          * 
          * So, rather than using one stream, we can use `two` streams: one for the `initVect` and the other for the `cipher text`.
          */
-        const readInitVect = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { end: 15 });
+        const readInitVect = fs.createReadStream(`${__dirname}${decryptFileRequest.fileToDecryptPath}`, { end: 15 });
         let initVect: Buffer;
         readInitVect.on('data', (chunk) => {
             initVect = chunk as Buffer;
@@ -126,7 +126,7 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
              * Once we’ve captured the initialization vector, and the read stream has closed, we can start 
              * decrypting the cipher text.
              */
-            const readStream = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { start: 16 });
+            const readStream = fs.createReadStream(`${__dirname}${decryptFileRequest.fileToDecryptPath}`, { start: 16 });
             /**
              * Similar to how we encrypted the file using `createCipheriv`, we’re going to use a new method: `createDecipheriv`. 
              * 
@@ -143,8 +143,7 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
             /**
              * Create a new writeStream so we can write our `decrypted`, `decompressed` file.
              */
-            const writeStream = fs.createWriteStream(decryptFileRequest.fileToDecryptPath + '.unenc');
-
+            const writeStream = fs.createWriteStream(`${__dirname}${decryptFileRequest.fileToDecryptPath}` + '.unenc');
             readStream
                 .pipe(decipher)
                 .pipe(unzip)
