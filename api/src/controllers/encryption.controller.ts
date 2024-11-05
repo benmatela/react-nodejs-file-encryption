@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from 'express';
+import { Response, Request } from 'express';
 import * as encryptionService from '../services/encryption.service';
 import loggingUtil from '../utils/logging.util';
 import {
@@ -62,6 +62,8 @@ const encrypt = async (req: Request, res: Response) => {
  * Decrypts a file using AES
  * 
  * To decrypt a file, we need to do everything we did to encrypt it but in reverse.
+ * 
+ * More info: https://www.moserware.com/2009/09/stick-figure-guide-to-advanced.html
  * 
  * @param {Request} req 
  * @param {Response} res 
