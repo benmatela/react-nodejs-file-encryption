@@ -37,9 +37,9 @@ export const getCipherKey = (password: string): Buffer => {
  * Modifies stream data(file chunks) by appending the `initVector`
  * 
  * Since we will be modifying the stream data, we will need to 
- * use a Transform stream.
+ * use a `Transform` stream.
  * 
- * There are four stream types within Node.js:
+ * There are 4 stream types within Node.js:
  * 
  * `Readable` — streams from which data can be read (for example `fs.createReadStream()`).
  * 

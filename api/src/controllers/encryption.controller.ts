@@ -4,7 +4,8 @@ import loggingUtil from '../utils/logging.util';
 import {
     IEncryptFileResponse,
     IEncryptFileRequest,
-    IDecryptFileResponse
+    IDecryptFileResponse,
+    IDecryptFileRequest
 } from '../models/encryption.model';
 import { IHttpResponseWrapper } from '../models/http-response-wrapper.model';
 import { HTTP_STATUS_CODE } from '../models/enums/http-status-code.enum';
@@ -16,9 +17,8 @@ const NAMESPACE = 'ENCRYPTION CONTROLLER';
  * 
  * @param {Request} req 
  * @param {Response} res 
- * @param {NextFunction} next 
  */
-const encrypt = async (req: Request, res: Response, next: NextFunction) => {
+const encrypt = async (req: Request, res: Response) => {
     loggingUtil.info(NAMESPACE, 'encrypt() called.');
     const httpResponseWrapper: IHttpResponseWrapper<IEncryptFileResponse> = {
         data: {} as IEncryptFileResponse,
@@ -61,11 +61,12 @@ const encrypt = async (req: Request, res: Response, next: NextFunction) => {
 /**
  * Decrypts a file using AES
  * 
+ * To decrypt a file, we need to do everything we did to encrypt it but in reverse.
+ * 
  * @param {Request} req 
  * @param {Response} res 
- * @param {NextFunction} next 
  */
-const decrypt = async (req: Request, res: Response, next: NextFunction) => {
+const decrypt = async (req: Request, res: Response) => {
     loggingUtil.info(NAMESPACE, 'decrypt() called.');
     const httpResponseWrapper: IHttpResponseWrapper<IDecryptFileResponse> = {
         data: {} as IDecryptFileResponse,
@@ -78,7 +79,22 @@ const decrypt = async (req: Request, res: Response, next: NextFunction) => {
         errors: []
     }
     try {
+        // Add model validation eg validator.ts
+        const decryptFileRequest: IDecryptFileRequest = {
+            aesBlockSize: parseInt(req.body.aesBlockSize),
+            fileToDecryptPath: String(req.body.fileToDecryptPath),
+            encryptionPassword: String(req.body.encryptionPassword)
+        }
 
+        const decryptFileResponse: IDecryptFileResponse = await encryptionService
+            .decrypt(decryptFileRequest);
+
+        // Build our response
+        httpResponseWrapper.data = decryptFileResponse;
+        httpResponseWrapper.success = true;
+        httpResponseWrapper.status = HTTP_STATUS_CODE.OK;
+
+        res.status(httpResponseWrapper.status).send(httpResponseWrapper);
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
 
