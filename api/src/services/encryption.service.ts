@@ -94,8 +94,35 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
  * @throws {Error} error
  */
 export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<IDecryptFileResponse> => {
+    const decryptFileResponse: IDecryptFileResponse = {
+        aesBlockSize: decryptFileRequest.aesBlockSize,
+        fileToDecryptPath: decryptFileRequest.fileToDecryptPath,
+        decryptionDurationInMinutes: 0,
+        decryptedFileSize: 0,
+    }
     try {
-        return {} as IDecryptFileResponse;
+        // Get the initialization vector from the file.
+        const readInitVect = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { end: 15 });
+        let initVect: Buffer;
+        readInitVect.on('data', (chunk) => {
+            initVect = chunk as Buffer;
+        });
+
+        // Once we’ve got the initialization vector, we can decrypt the file.
+        readInitVect.on('close', () => {
+            const cipherKey = getCipherKey(decryptFileRequest.encryptionPassword);
+            const readStream = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { start: 16 });
+            const decipher = crypto.createDecipheriv(EncryptionAlgorithm.AES256, cipherKey, initVect);
+            const unzip = zlib.createUnzip();
+            const writeStream = fs.createWriteStream(decryptFileRequest.fileToDecryptPath + '.unenc');
+
+            readStream
+                .pipe(decipher)
+                .pipe(unzip)
+                .pipe(writeStream);
+        });
+
+        return decryptFileResponse;
     } catch (error: any) {
         loggingUtil.error(NAMESPACE, error.message);
         throw new Error(error.message);
