@@ -101,7 +101,15 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
         decryptedFileSize: 0,
     }
     try {
-        // Get the initialization vector from the file.
+        /**
+         * Get the initialization vector from the file.
+         * 
+         * `createReadStream` takes two arguments: `path` and `options`. 
+         * 
+         * Using the `options` argument, we can tell the stream where to `start` and `end`. 
+         * 
+         * So, rather than using one stream, we can use `two` streams: one for the `initVect` and the other for the `cipher text`.
+         */
         const readInitVect = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { end: 15 });
         let initVect: Buffer;
         readInitVect.on('data', (chunk) => {
@@ -111,9 +119,30 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
         // Once we’ve got the initialization vector, we can decrypt the file.
         readInitVect.on('close', () => {
             const cipherKey = getCipherKey(decryptFileRequest.encryptionPassword);
+            /**
+             * Since we know that the initialization vector for `AES-256` is `16` bytes, we can tell the 
+             * stream to only read the first `16` bytes. 
+             * 
+             * Once we’ve captured the initialization vector, and the read stream has closed, we can start 
+             * decrypting the cipher text.
+             */
             const readStream = fs.createReadStream(decryptFileRequest.fileToDecryptPath, { start: 16 });
+            /**
+             * Similar to how we encrypted the file using `createCipheriv`, we’re going to use a new method: `createDecipheriv`. 
+             * 
+             * It takes the same arguments as `createCipheriv`
+             */
             const decipher = crypto.createDecipheriv(EncryptionAlgorithm.AES256, cipherKey, initVect);
+            /**
+             * Next step is decompressing the file. 
+             * 
+             * In the same way that we created a gzip stream using the createGzip method, we’ll be 
+             * using its inverse: `createUnzip`.
+             */
             const unzip = zlib.createUnzip();
+            /**
+             * Create a new writeStream so we can write our `decrypted`, `decompressed` file.
+             */
             const writeStream = fs.createWriteStream(decryptFileRequest.fileToDecryptPath + '.unenc');
 
             readStream
