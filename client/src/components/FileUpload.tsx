@@ -1,6 +1,31 @@
 import React, { useState } from 'react'
+import { AESBlockSize } from '../models/enums/encryption.enum';
 
-export const FileUpload = () => {
+type FileUploadProps = {
+    /**
+     * Should we encrypt this file?
+     */
+    shouldEncrypt: boolean;
+    /**
+     * `AES` block size to be used by the API to encrypt this file
+     */
+    aesBlockSize: AESBlockSize;
+    /**
+     * Password to be used when `encrypting/decrypting` this file
+     */
+    encryptionPassword: string;
+}
+
+/**
+ * Upload a file to the API with the option to encrypt the file
+ * 
+ * @returns {JSX.Element} component
+ */
+export const FileUpload = ({
+    shouldEncrypt,
+    aesBlockSize,
+    encryptionPassword
+}: FileUploadProps): JSX.Element => {
     const [selectedFile, setSelectedFile] = useState<File>();
     const [uploadStatus, setUploadStatus] = useState<string>("");
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -31,7 +56,7 @@ export const FileUpload = () => {
             }
 
             // 5MB per chunk (adjust based on your requirements)
-            const chunkSize = 5 * 1024 * 1024; 
+            const chunkSize = 5 * 1024 * 1024;
             const totalChunks = Math.ceil(selectedFile.size / chunkSize);
             const chunkProgress = 100 / totalChunks;
             let chunkNumber = 0;
@@ -84,11 +109,11 @@ export const FileUpload = () => {
     };
 
     return (
-        <div>
+        <div id='fileUpload'>
             <h2>Resumable File Upload</h2>
             <h3>{uploadStatus}</h3>
             {uploadProgress > 0 && <progress value={uploadProgress} />}
-            <input type="file" onChange={handleFileChange} />
+            <input id='file' type="file" onChange={handleFileChange} />
             <button onClick={handleFileUpload}>Upload File</button>
         </div>
     );
