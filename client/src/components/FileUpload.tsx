@@ -82,8 +82,7 @@ export const FileUpload = ({
                         .then((response) => response.json())
                         .then((data) => {
                             console.log({ data });
-                            const temp = `Chunk ${chunkNumber + 1
-                                }/${totalChunks} uploaded successfully`;
+                            const temp = `Chunk ${chunkNumber + 1}/${totalChunks} uploaded successfully`;
                             setUploadStatus(temp);
                             setUploadProgress(Number((chunkNumber + 1) * chunkProgress));
                             console.log(temp);
