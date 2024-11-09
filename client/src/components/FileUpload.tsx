@@ -111,7 +111,6 @@ export const FileUpload = ({
 
     return (
         <div id='fileUpload'>
-            <h2>Resumable File Upload</h2>
             <h3>{uploadStatus}</h3>
             {uploadProgress > 0 && <progress value={uploadProgress} />}
             <input id='file' type="file" onChange={handleFileChange} />
