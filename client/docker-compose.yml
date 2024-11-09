@@ -2,7 +2,7 @@ services:
   client:
     image: node:alpine
     container_name: client
-    entrypoint: /bin/sh
+    entrypoint: ["/bin/sh", "-c"]
     ports:
       - 3000:3000
     working_dir: /srv/app
@@ -10,4 +10,8 @@ services:
       - type: bind
         source: ./
         target: /srv/app
+    command:
+      - |
+        npm i
+        npm start
     tty: true
