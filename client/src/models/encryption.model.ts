@@ -68,6 +68,10 @@ export interface IEncryptFileRequest {
      * Password used to encrypt this file
      */
     encryptionPassword: string;
+    /**
+     * Selected file to upload
+     */
+    fileToUpload?: File
 }
 
 /**

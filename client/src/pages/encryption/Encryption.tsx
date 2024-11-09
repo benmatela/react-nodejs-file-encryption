@@ -19,7 +19,7 @@ export const Encryption = () => {
      */
     const onSubmit = (formData: IEncryptFileRequest) => {
         try {
-
+            console.log("formData: ", formData);
         } catch (error: any) {
             console.error(error.message)
         }
@@ -54,13 +54,14 @@ export const Encryption = () => {
                     />
                     <p className="error text-red-500">{errors.encryptionPassword?.message}</p>
                 </div>
+                <FileUpload
+                    shouldEncrypt={shouldEncrypt}
+                    aesBlockSize={aesBlockSize}
+                    encryptionPassword={encryptionPassword}
+                    currentForm={form}
+                />
+                <button type='submit'>Submit</button>
             </form>
-
-            <FileUpload
-                shouldEncrypt={shouldEncrypt}
-                aesBlockSize={aesBlockSize}
-                encryptionPassword={encryptionPassword}
-            />
         </div>
     )
 }

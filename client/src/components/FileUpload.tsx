@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { AESBlockSize } from '../models/enums/encryption.enum';
 import configs from '../utils/configs.util';
 import { HTTP_REQUEST_METHOD } from '../models/enums/http-request-method.enum';
+import { UseFormReturn } from 'react-hook-form';
 
 type FileUploadProps = {
     /**
@@ -16,6 +17,10 @@ type FileUploadProps = {
      * Password to be used when `encrypting/decrypting` this file
      */
     encryptionPassword: string;
+    /**
+     * Current form
+     */
+    currentForm: UseFormReturn<any, any, undefined>
 }
 
 /**
@@ -26,11 +31,13 @@ type FileUploadProps = {
 export const FileUpload = ({
     shouldEncrypt,
     aesBlockSize,
-    encryptionPassword
+    encryptionPassword,
+    currentForm
 }: FileUploadProps): JSX.Element => {
     const [selectedFile, setSelectedFile] = useState<File>();
     const [uploadStatus, setUploadStatus] = useState<string>("");
     const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const { register } = currentForm;
 
     /**
      * Handles file select change
@@ -113,8 +120,15 @@ export const FileUpload = ({
         <div id='fileUpload'>
             <h3>{uploadStatus}</h3>
             {uploadProgress > 0 && <progress value={uploadProgress} />}
-            <input id='file' type="file" onChange={handleFileChange} />
-            <button onClick={handleFileUpload}>Upload File</button>
+            <input
+                id='fileToUpload'
+                type="file"
+                className=""
+                data-testid={"fileToUpload"}
+                {...register("fileToUpload", {
+                    required: "File To Upload is required",
+                })}
+            />
         </div>
     );
 }
