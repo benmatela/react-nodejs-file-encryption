@@ -18,7 +18,7 @@ type FileUploadProps = {
      */
     encryptionPassword: string;
     /**
-     * Current form
+     * Current form from the parent component
      */
     currentForm: UseFormReturn<any, any, undefined>
 }

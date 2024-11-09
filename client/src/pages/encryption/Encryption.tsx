@@ -6,7 +6,7 @@ import { IEncryptFileRequest } from '../../models/encryption.model';
 
 export const Encryption = () => {
     const form = useForm<IEncryptFileRequest>();
-    const { register, control, handleSubmit, formState } = form;
+    const { register, handleSubmit, formState } = form;
     const { errors } = formState;
     const [shouldEncrypt, setShouldEncrypt] = useState<boolean>(true);
     const [aesBlockSize, setAesBlockSize] = useState<AESBlockSize>(AESBlockSize.AES_256);
@@ -20,6 +20,7 @@ export const Encryption = () => {
     const onSubmit = (formData: IEncryptFileRequest) => {
         try {
             console.log("formData: ", formData);
+            console.log("form file: ", formData?.fileToUpload);
         } catch (error: any) {
             console.error(error.message)
         }
