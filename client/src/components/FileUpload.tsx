@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { AESBlockSize } from '../models/enums/encryption.enum';
+import configs from '../utils/configs.util';
+import { HTTP_REQUEST_METHOD } from '../models/enums/http-request-method.enum';
 
 type FileUploadProps = {
     /**
@@ -75,8 +77,8 @@ export const FileUpload = ({
                     formData.append("totalChunks", String(totalChunks));
                     formData.append("originalname", selectedFile.name);
 
-                    fetch("http://localhost:4000/encrypt", {
-                        method: "POST",
+                    fetch(configs.react.apiBaseUrl, {
+                        method: HTTP_REQUEST_METHOD.POST,
                         body: formData,
                     })
                         .then((response) => response.json())
