@@ -61,7 +61,7 @@ export const encrypt = async (encryptFileRequest: IEncryptFileRequest): Promise<
          */
         const readStream = fs.createReadStream(`${__dirname}${encryptFileRequest.fileToEncryptPath}`);
         const gzipStream = zlib.createGzip();
-        const cipher = crypto.createCipheriv(EncryptionAlgorithm.AES256, cipherKey, initVect);
+        const cipher = crypto.createCipheriv(EncryptionAlgorithm.AES_256, cipherKey, initVect);
         const appendInitVector = new AppendInitVector(initVect);
         // Create a write stream with a different file extension.
         const writeStream = fs.createWriteStream(`${__dirname}${encryptFileResponse.encryptedFilePath}.enc`);
@@ -132,7 +132,7 @@ export const decrypt = async (decryptFileRequest: IDecryptFileRequest): Promise<
              * 
              * It takes the same arguments as `createCipheriv`
              */
-            const decipher = crypto.createDecipheriv(EncryptionAlgorithm.AES256, cipherKey, initVect);
+            const decipher = crypto.createDecipheriv(EncryptionAlgorithm.AES_256, cipherKey, initVect);
             /**
              * Next step is decompressing the file. 
              * 

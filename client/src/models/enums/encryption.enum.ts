@@ -14,5 +14,5 @@ export enum AESBlockSize {
  */
 export enum EncryptionAlgorithm {
     SHA_256 = "sha256",
-    AES256 = "aes256"
+    AES_256 = "aes256"
 }
